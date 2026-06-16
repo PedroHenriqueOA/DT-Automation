@@ -28,15 +28,26 @@ driver.implicitly_wait(1000)
 driver.find_element(
     By.XPATH, "/html/body/div[2]/section/div/div[1]/div/div[1]/a"
 ).click()
-# ---------------------------Fill First Form--------------------------------------
-# Preenche o campo de cliente
 driver.implicitly_wait(1000)
+# ---------------------------Fill First Form--------------------------------------
+# Preenche o campo de client
+
+driver.switch_to.frame(10)
 cliente_button = driver.find_element(
     By.CSS_SELECTOR,
-    "html body div.margin-5px div.cards-form div.divmargin div#SOLICITACAO div form#new.form.has-validation-callback div.floatLeft.L40 div.input-group.divmargin div.custom-select div.btn-group.bootstrap-select.show-tick.open button.btn.dropdown-toggle.bs-placeholder.btn-selectbox",
+    "div.floatLeft:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > button:nth-child(1)",
 )
 cliente_button.click()
 driver.implicitly_wait(1000)
 driver.find_element(
     By.XPATH, "/html/body/div[1]/div/div/div/div/form/div[1]/div/div/div/div/div/input"
 ).send_keys(cliente)
+
+
+# -----------------IFRAME TEST------------------------------
+# iframes = driver.find_elements(By.TAG_NAME, "iframe")
+# print(f"IFRAMES: {len(iframes)}")
+
+# for i, iframe in enumerate(iframes):
+#     print(i, iframe.get_attribute("src"))
+# -----------------IFRAME TEST------------------------------
