@@ -8,7 +8,7 @@ driver = webdriver.Firefox()
 dt_user = "05855880583"
 dt_pass = "DT123@"
 cliente = "Shopee LTDA"
-site = ""
+site = "HUB-LSP-60"
 chave = ""
 coordenador = ""
 time = ""
@@ -30,20 +30,21 @@ driver.find_element(
 ).click()
 driver.implicitly_wait(1000)
 # ---------------------------Fill First Form--------------------------------------
-# Preenche o campo de client
-
+# ------ Preenche o campo de client-------
 driver.switch_to.frame(10)
-cliente_button = driver.find_element(
-    By.CSS_SELECTOR,
-    "div.floatLeft:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > button:nth-child(1)",
+btn_cliente = cliente_button = driver.find_element(
+    By.CSS_SELECTOR, "[data-id='cliente_plan']"
 )
-cliente_button.click()
+
+btn_cliente.click()
+btn_cliente.click()
+
 driver.implicitly_wait(1000)
 driver.find_element(
     By.XPATH, "/html/body/div[1]/div/div/div/div/form/div[1]/div/div/div/div/div/input"
 ).send_keys(cliente)
-
-
+driver.implicitly_wait(1000)
+driver.find_element(By.CSS_SELECTOR, ".active > a:nth-child(1)").click()
 # -----------------IFRAME TEST------------------------------
 # iframes = driver.find_elements(By.TAG_NAME, "iframe")
 # print(f"IFRAMES: {len(iframes)}")
@@ -51,3 +52,21 @@ driver.find_element(
 # for i, iframe in enumerate(iframes):
 #     print(i, iframe.get_attribute("src"))
 # -----------------IFRAME TEST------------------------------
+
+# ------- Preenche o campo de site-----------------
+btn_site = cliente_button = driver.find_element(
+    By.CSS_SELECTOR, "[data-id='site_plan']"
+)
+
+btn_site.click()
+# btn_site.click()
+
+driver.implicitly_wait(1000)
+driver.find_element(
+    By.XPATH, "/html/body/div[1]/div/div/div/div/form/div[2]/div/div/div/div/div/input"
+).send_keys(site)
+driver.implicitly_wait(1000)
+driver.find_element(By.CSS_SELECTOR, ".active: > a:nth-child(1)").click()
+
+
+driver.quit
