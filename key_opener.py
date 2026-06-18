@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys, ActionChains
 
 driver = webdriver.Firefox()
 
@@ -62,11 +63,13 @@ btn_site.click()
 # btn_site.click()
 
 driver.implicitly_wait(1000)
-driver.find_element(
+site_input = driver.find_element(
     By.XPATH, "/html/body/div[1]/div/div/div/div/form/div[2]/div/div/div/div/div/input"
-).send_keys(site)
+)
+site_input.send_keys(site)
 driver.implicitly_wait(1000)
-driver.find_element(By.CSS_SELECTOR, ".active: > a:nth-child(1)").click()
+site_input.send_keys(Keys.ENTER)
+send_keys(Keys.TAB)
 
 
 driver.quit
