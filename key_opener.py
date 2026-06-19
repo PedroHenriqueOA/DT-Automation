@@ -4,27 +4,24 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver import ActionChains
 
 
-def openKey():
+def openKey(site, date_plan, hour_plan, workers_quantity):
 
     driver = webdriver.Firefox()
 
-    # ------------VARIABLES-------------------
+    # ------------LOGIN----------------------------
+    loginDT(dt_user, dt_pass)
+
+    # ------------VARIABLES---------------------
     dt_user = "05855880583"
     dt_pass = "DT123@"
     cliente = "Shopee LTDA"
-    site = "HUB-LSP-60"
-    chave = ""
-    coordenador = ""
+    demand1d8 = (
+        "/html/body/div[1]/div/div/div/div/form/div[7]/div/div/div/div/ul/li[1]/a"
+    )
+    demand3d8 = "html body div.margin-5px div.cards-form div.divmargin div#SOLICITACAO div form#new.form.has-validation-callback div.floatLeft.L35 div.input-group.divmargin div.custom-select div.btn-group.bootstrap-select.show-tick.open div.dropdown-menu.open ul.dropdown-menu.inner li a"
     time = ""
-    date_plan = "13/05/2022"
-    hour_plan = "1400"
-    workers_quantity = "10"
-    # -----------------------DT LOGIN    ----------------------------------
-    driver.get("https://tsi-app.com/planejamento-operacional_1")
-    driver.implicitly_wait(1000)
-    driver.find_element(By.ID, "username").send_keys(dt_user)
-    driver.find_element(By.ID, "password").send_keys(dt_pass)
-    driver.find_element(By.NAME, "send").click()
+    coordenador = ""
+    chave = ""
 
     # ---------------------OPEN NOVO PLANEJAMENTO-----------------------------
     driver.get("https://tsi-app.com/planejamento-operacional_1")
@@ -97,7 +94,36 @@ def openKey():
     # ----------------------------Preenche campo de quatidade------------------------------
     ActionChains(driver).send_keys(workers_quantity).perform()
     ActionChains(driver).send_keys(Keys.TAB).perform()
+    # -----------------------------SUBMIT--------------------------------------------
+    driver.find_element(By.ID, "submitF").click()
+
+    # ------------------------NEXT PAGE  --------------------------------------------------
+    driver.implicitly_wait(1000)
+
+    # ----------------------Preencher demanda-----------------------------
+    driver.find_element(By.CSS_SELECTOR, "[data-id='jornada_plan']").click()
+    driver.find_element(By.XPATH, demand1d8).click()
+    # -----------------------Confirmações---------------------------
+    driver.find_element(By.ID, "p1_confirm_0").click()
+    driver.find_element(By.ID, "p2_confirm_0").click()
+    # -----------------------------SUBMIT--------------------------------------------
+    driver.find_element(By.ID, "submitF").click()
+    # -----------------------------Clica no olho--------------------------------------------
+    driver.implicitly_wait(1000)
+    driver.find_element(
+        By.XPATH, "/html/body/div[1]/div[3]/div/div/div/form/div[2]/div/span[3]/a"
+    )
+    # ----------------------Confirmar Solicitação--------------------
+    driver.implicitly_wait(1000)
 
     # ActionChains(driver).send_keys(Keys.TAB)
 
     driver.quit
+
+
+def loginDT(driver, dt_user, dt_pass):
+    driver.get("https://tsi-app.com/planejamento-operacional_1")
+    driver.implicitly_wait(1000)
+    driver.find_element(By.ID, "username").send_keys(dt_user)
+    driver.find_element(By.ID, "password").send_keys(dt_pass)
+    driver.find_element(By.NAME, "send").click()
