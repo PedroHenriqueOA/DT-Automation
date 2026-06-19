@@ -4,16 +4,22 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver import ActionChains
 
 
-def openKey(site, date_plan, hour_plan, workers_quantity):
+def loginDT(driver, dt_user, dt_pass):
+    driver.get("https://tsi-app.com/planejamento-operacional_1")
+    driver.implicitly_wait(1000)
+    driver.find_element(By.ID, "username").send_keys(dt_user)
+    driver.find_element(By.ID, "password").send_keys(dt_pass)
+    driver.find_element(By.NAME, "send").click()
+
+
+def openKey(site, date_plan, hour_plan, workers_quantity, dt_user, dt_pass):
 
     driver = webdriver.Firefox()
 
     # ------------LOGIN----------------------------
-    loginDT(dt_user, dt_pass)
+    loginDT(driver, dt_user, dt_pass)
 
     # ------------VARIABLES---------------------
-    dt_user = "05855880583"
-    dt_pass = "DT123@"
     cliente = "Shopee LTDA"
     demand1d8 = (
         "/html/body/div[1]/div/div/div/div/form/div[7]/div/div/div/div/ul/li[1]/a"
@@ -93,9 +99,9 @@ def openKey(site, date_plan, hour_plan, workers_quantity):
     ActionChains(driver).send_keys(Keys.TAB).perform()
     # ----------------------------Preenche campo de quatidade------------------------------
     ActionChains(driver).send_keys(workers_quantity).perform()
-    ActionChains(driver).send_keys(Keys.TAB).perform()
+    # ActionChains(driver).send_keys(Keys.TAB).perform()
     # -----------------------------SUBMIT--------------------------------------------
-    driver.find_element(By.ID, "submitF").click()
+    # driver.find_element(By.ID, "submitF").click()
 
     # ------------------------NEXT PAGE  --------------------------------------------------
     driver.implicitly_wait(1000)
@@ -118,12 +124,4 @@ def openKey(site, date_plan, hour_plan, workers_quantity):
 
     # ActionChains(driver).send_keys(Keys.TAB)
 
-    driver.quit
-
-
-def loginDT(driver, dt_user, dt_pass):
-    driver.get("https://tsi-app.com/planejamento-operacional_1")
-    driver.implicitly_wait(1000)
-    driver.find_element(By.ID, "username").send_keys(dt_user)
-    driver.find_element(By.ID, "password").send_keys(dt_pass)
-    driver.find_element(By.NAME, "send").click()
+    driver.quit()
