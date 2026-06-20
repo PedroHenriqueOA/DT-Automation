@@ -5,7 +5,6 @@ from pandas import DataFrame
 
 
 def copyCpf(download_directory, escalamento_path):
-    # -----Adicionar metodo para deletar o arquivo depois de ler, para evitar que ele seja lido novamente no futuro, ou criar uma pasta para mover os arquivos lidos-----
 
     list_of_files = glob.glob(
         download_directory
@@ -31,3 +30,4 @@ def copyCpf(download_directory, escalamento_path):
     print("---------------ESCALAMENTO AFTER RENAME--------------------------")
     escalamento = pd.read_csv(escalamento_path)
     print(escalamento.iloc[0:])
+    os.remove(latest_file)  # Deleta arquivo no final

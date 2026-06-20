@@ -7,10 +7,10 @@ import keyboard
 load_dotenv()
 
 # ---------------INFORMAÇÕES DO PLANEJAMENTO-----------------------------
-site = "HUB-LES-03"
-date_plan = "19/06/2026"
-hour_plan = "0930"
-workers_quantity = "6"
+site = "HUB-LGO-03"
+date_plan = "22/06/2026"
+hour_plan = "0700"
+workers_quantity = "4"
 # ---------------------------------------------------------------------
 dt_user = os.getenv("DT_USERNAME")
 dt_pass = os.getenv("DT_PASSWORD")

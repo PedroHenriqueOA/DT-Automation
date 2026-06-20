@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver import ActionChains
+from whats_automation import sendWppMsg
 
 
 def loginDT(driver, dt_user, dt_pass):
@@ -10,6 +11,38 @@ def loginDT(driver, dt_user, dt_pass):
     driver.find_element(By.ID, "username").send_keys(dt_user)
     driver.find_element(By.ID, "password").send_keys(dt_pass)
     driver.find_element(By.NAME, "send").click()
+
+
+def iframe_test(driver):
+    # -----------------IFRAME TEST------------------------------
+
+    from selenium.webdriver.common.by import By
+
+
+def encontrar_caminho(driver, caminho=[]):
+    if driver.find_elements(By.ID, "qtdlider"):
+        print("Caminho:", caminho)
+        return True
+
+    frames = driver.find_elements(By.TAG_NAME, "iframe")
+
+    for i, frame in enumerate(frames):
+        driver.switch_to.frame(frame)
+
+        if encontrar_caminho(driver, caminho + [i]):
+            return True
+
+        driver.switch_to.parent_frame()
+
+    return False
+
+
+# iframes = driver.find_elements(By.TAG_NAME, "iframe")
+# print(f"IFRAMES: {len(iframes)}")
+
+# for i, iframe in enumerate(iframes):
+#     print(i, iframe.get_attribute("src"))
+# -----------------IFRAME TEST------------------------------
 
 
 def openKey(site, date_plan, hour_plan, workers_quantity, dt_user, dt_pass):
@@ -24,7 +57,9 @@ def openKey(site, date_plan, hour_plan, workers_quantity, dt_user, dt_pass):
     demand1d8 = (
         "/html/body/div[1]/div/div/div/div/form/div[7]/div/div/div/div/ul/li[1]/a"
     )
-    demand3d8 = "html body div.margin-5px div.cards-form div.divmargin div#SOLICITACAO div form#new.form.has-validation-callback div.floatLeft.L35 div.input-group.divmargin div.custom-select div.btn-group.bootstrap-select.show-tick.open div.dropdown-menu.open ul.dropdown-menu.inner li a"
+    demand3d8 = (
+        "/html/body/div[1]/div/div/div/div/form/div[7]/div/div/div/div/ul/li[2]/a"
+    )
     time = ""
     coordenador = ""
     chave = ""
@@ -54,13 +89,6 @@ def openKey(site, date_plan, hour_plan, workers_quantity, dt_user, dt_pass):
     ).send_keys(cliente)
     driver.implicitly_wait(1000)
     driver.find_element(By.CSS_SELECTOR, ".active > a:nth-child(1)").click()
-    # -----------------IFRAME TEST------------------------------
-    # iframes = driver.find_elements(By.TAG_NAME, "iframe")
-    # print(f"IFRAMES: {len(iframes)}")
-
-    # for i, iframe in enumerate(iframes):
-    #     print(i, iframe.get_attribute("src"))
-    # -----------------IFRAME TEST------------------------------
 
     # ------- Preenche o campo de site-----------------
     btn_site = cliente_button = driver.find_element(
@@ -101,13 +129,14 @@ def openKey(site, date_plan, hour_plan, workers_quantity, dt_user, dt_pass):
     ActionChains(driver).send_keys(workers_quantity).perform()
     # ActionChains(driver).send_keys(Keys.TAB).perform()
     # -----------------------------SUBMIT--------------------------------------------
-    # driver.find_element(By.ID, "submitF").click()
+    driver.find_element(By.ID, "submitF").click()
 
     # ------------------------NEXT PAGE  --------------------------------------------------
     driver.implicitly_wait(1000)
 
     # ----------------------Preencher demanda-----------------------------
     driver.find_element(By.CSS_SELECTOR, "[data-id='jornada_plan']").click()
+    driver.implicitly_wait(1000)
     driver.find_element(By.XPATH, demand1d8).click()
     # -----------------------Confirmações---------------------------
     driver.find_element(By.ID, "p1_confirm_0").click()
@@ -118,10 +147,45 @@ def openKey(site, date_plan, hour_plan, workers_quantity, dt_user, dt_pass):
     driver.implicitly_wait(1000)
     driver.find_element(
         By.XPATH, "/html/body/div[1]/div[3]/div/div/div/form/div[2]/div/span[3]/a"
-    )
+    ).click()
     # ----------------------Confirmar Solicitação--------------------
     driver.implicitly_wait(1000)
+    driver.find_element(By.XPATH, "/html/body/div[1]/div/div[2]/a").click()
+    driver.implicitly_wait(1000)
 
-    # ActionChains(driver).send_keys(Keys.TAB)
+    # -----------------------Capturar Informações------------------------
 
-    driver.quit()
+    # chave = driver.find_element(By.ID, "chave_pedido").text
+    # time = driver.find_element(By.CSS_SELECTOR, "[data-id='time_pedido']").text
+    # coordenador = driver.find_element(By.ID, "coordenador_pedido").text
+
+    # -------------------------Save------------------------------
+
+    # driver.implicitly_wait(1000)
+    # driver.find_element(By.ID, "submitF").click()
+    # driver.implicitly_wait(1000)
+
+    # ------------------------Inserir Quantidade Advisor------------------------------------
+
+    driver.find_element(
+        By.XPATH,
+        "/html/body/div[1]/div/div[2]/div/div/div[1]/div/form/div[18]/div[2]/div/table/tbody/tr/td[4]/a[1]",
+    ).click()
+    driver.implicitly_wait(1000)
+    ActionChains(driver).send_keys(Keys.TAB).perform()
+    ActionChains(driver).send_keys(Keys.TAB).perform()
+    ActionChains(driver).send_keys(Keys.TAB).perform()
+    ActionChains(driver).send_keys(workers_quantity).perform()
+    ActionChains(driver).send_keys(Keys.TAB).perform()
+    ActionChains(driver).send_keys(Keys.ENTER).perform()
+
+    # driver.switch_to.frame(6)
+    # qtdlider = driver.find_element(By.ID, "qtdlider")
+    # # qtdlider.click()
+    # qtdlider.send_keys(workers_quantity)
+    # driver.find_element(By.ID, "submitF").click()
+    # driver.find_element(By.CLASS_NAME, "close").click()
+    # --------------------------Gravar Informações------------------------------
+
+    # sendWppMsg("+5575999207767", chave + coordenador + time)
+    # driver.quit()
