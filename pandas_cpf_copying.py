@@ -30,4 +30,4 @@ def copyCpf(download_directory, escalamento_path):
     print("---------------ESCALAMENTO AFTER RENAME--------------------------")
     escalamento = pd.read_csv(escalamento_path)
     print(escalamento.iloc[0:])
-    os.remove(latest_file)  # Deleta arquivo no final
+    # os.remove(latest_file)  # Deleta arquivo no final
